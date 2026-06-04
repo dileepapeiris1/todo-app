@@ -31,8 +31,17 @@ const EditForm = ({ todo, onSave, onCancel, busy = false }: Props) => {
 
   useEffect(() => { ref.current?.focus(); }, []);
 
+  const hasChanges =
+    title.trim() !== todo.title.trim() ||
+    (desc?.trim() || '') !== (todo.description?.trim() || '') ||
+    dueDate !== (todo.dueDate ? toDateTimeLocal(todo.dueDate) : '');
+
   const submit = () => {
     if (!title.trim()) return;
+    if (!hasChanges) {
+      onCancel();
+      return;
+    }
     onSave(todo._id, {
       title: title.trim(),
       description: desc.trim() || undefined,
@@ -83,7 +92,7 @@ const EditForm = ({ todo, onSave, onCancel, busy = false }: Props) => {
           className="rounded-lg border border-quaternary-200 px-3.5 py-1.5 text-xs text-quaternary-600 hover:bg-quaternary-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
           Cancel
         </button>
-        <button onClick={submit} disabled={!title.trim() || busy}
+        <button onClick={submit} disabled={!title.trim() || busy || !hasChanges}
           className="rounded-lg bg-primary px-3.5 py-1.5 text-xs font-medium text-white hover:bg-primary-hover disabled:opacity-40 transition-colors">
           Save changes
         </button>
