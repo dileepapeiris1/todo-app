@@ -151,7 +151,7 @@ The list endpoint accepts `sortBy` (createdAt | dueDate | title) and `sortOrder`
 
 ### Authentication
 
-Google OAuth 2.0. The frontend uses Google Identity Services to get a credential token from Google, then sends it to `POST /api/v1/auth/google`. The server verifies it with `google-auth-library`. If valid, a 7-day JWT is issued and returned.
+Google OAuth 2.0. The client (webapp or mobileapp) gets a credential token from Google, then sends it to `POST /api/v1/auth/google`. The server verifies it with `google-auth-library`. If valid, a 7-day JWT is issued and returned.
 
 The app stores no passwords. User accounts are created on first sign-in if the Google ID is new.
 

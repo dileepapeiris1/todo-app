@@ -1,4 +1,4 @@
-# TrackLog — Frontend
+# TrackLog — Web App
 
 React web app for the TrackLog task manager. Built with Vite, TypeScript, Tailwind CSS, and TanStack Query.
 
@@ -32,7 +32,7 @@ VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 
 `VITE_API_URL` — the base URL of the backend. For local dev this is `http://localhost:5000`. For Choreo deployments it will be something like `https://your-backend.choreoapis.dev`.
 
-`VITE_GOOGLE_CLIENT_ID` — same client ID used in the backend. The frontend uses the Google Identity Services SDK to get a credential token which is then sent to the backend for verification.
+`VITE_GOOGLE_CLIENT_ID` — same client ID used in the backend. The webapp uses the Google Identity Services SDK to get a credential token which is then sent to the backend for verification.
 
 ---
 
