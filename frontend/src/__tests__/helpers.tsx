@@ -1,5 +1,3 @@
-/** Shared test utilities — providers wrapper and fixture factories. */
-
 import { type ReactElement } from 'react';
 import { render, type RenderResult } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

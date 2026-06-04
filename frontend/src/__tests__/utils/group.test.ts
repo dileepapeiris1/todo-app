@@ -1,5 +1,3 @@
-/** Tests for the groupByDate utility. */
-
 import { describe, it, expect } from 'vitest';
 import { groupByDate } from '@/utils/group';
 import { SortField, SortOrder } from '@/types/sorting';
