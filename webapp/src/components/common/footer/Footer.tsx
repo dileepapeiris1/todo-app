@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 interface FooterProps {
   brand: string;
   tagline: string;
@@ -17,9 +19,9 @@ const Footer = ({ brand, tagline }: FooterProps) => (
   <footer className="border-t border-quaternary-100 bg-white dark:border-gray-800 dark:bg-gray-900">
     <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
       <div className="flex flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:gap-4 sm:text-left">
-        <a href="/home" className="text-sm font-bold text-quaternary-800 hover:opacity-70 transition-opacity">
+        <Link to="/home" className="text-sm font-bold text-quaternary-800 hover:opacity-70 transition-opacity">
           {brand}
-        </a>
+        </Link>
         <p className="text-xs text-quaternary-400 dark:text-gray-500 sm:text-sm dark:text-gray-500">{tagline}</p>
         <span className="text-xs text-quaternary-400">
           &copy; {new Date().getFullYear()} {brand}

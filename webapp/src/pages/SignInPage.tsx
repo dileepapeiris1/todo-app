@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   GOOGLE_GSI_SCRIPT_URL,
   SIGN_IN_ERROR_FAILED,
@@ -111,12 +111,12 @@ const SignInPage = () => {
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#fafaf9] px-4 dark:bg-gray-900">
 
       {/* Brand name — links back to the landing page */}
-      <a
-        href={ROUTES.HOME}
+      <Link
+        to={ROUTES.HOME}
         className="mb-8 text-2xl font-black tracking-tight text-quaternary-900 transition-opacity hover:opacity-70 dark:text-gray-100"
       >
         TrackLog
-      </a>
+      </Link>
 
       {/* Sign-in card */}
       <div className="w-full max-w-[360px] rounded-2xl bg-white px-8 py-10 shadow-[0_2px_4px_rgba(0,0,0,0.04),0_12px_40px_rgba(0,0,0,0.08)] dark:bg-gray-800 dark:shadow-none dark:border dark:border-gray-700">

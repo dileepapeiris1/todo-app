@@ -1,5 +1,6 @@
 /** Landing page header — sticky top bar with brand, nav links, auth CTAs, and theme toggle. */
 
+import { Link } from 'react-router-dom';
 import { Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
 
@@ -29,17 +30,17 @@ const Header = ({ brand, links, loginCta, signupCta }: HeaderProps) => {
     <header className="sticky top-0 z-50 border-b border-quaternary-100/60 bg-secondary/90 backdrop-blur-md dark:border-gray-700/60 dark:bg-gray-900/90">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-        <a href="/" className="flex items-center font-bold text-quaternary-900 hover:opacity-90 dark:text-gray-100">
+        <Link to="/" className="flex items-center font-bold text-quaternary-900 hover:opacity-90 dark:text-gray-100">
           <span className="text-lg tracking-tight">{brand}</span>
-        </a>
+        </Link>
 
         {links.length > 0 && (
           <nav className="hidden items-center gap-1 md:flex">
             {links.map(link => (
-              <a key={link.href} href={link.href}
+              <Link key={link.href} to={link.href}
                 className="rounded-lg px-3 py-2 text-sm font-medium text-quaternary-600 transition-colors hover:bg-quaternary-100 hover:text-quaternary-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-100">
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
         )}
@@ -54,15 +55,15 @@ const Header = ({ brand, links, loginCta, signupCta }: HeaderProps) => {
             {theme === Theme.Dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
 
-          <a href={loginCta.href}
+          <Link to={loginCta.href}
             className="rounded-lg px-4 py-2 text-sm font-medium text-quaternary-600 transition-colors hover:text-quaternary-900 dark:text-gray-300 dark:hover:text-gray-100">
             {loginCta.label}
-          </a>
+          </Link>
           {signupCta && (
-            <a href={signupCta.href}
+            <Link to={signupCta.href}
               className="rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-hover">
               {signupCta.label}
-            </a>
+            </Link>
           )}
         </div>
 
@@ -90,17 +91,17 @@ const Header = ({ brand, links, loginCta, signupCta }: HeaderProps) => {
           {links.length > 0 && (
             <nav className="mb-4 flex flex-col gap-1">
               {links.map(link => (
-                <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}
+                <Link key={link.href} to={link.href} onClick={() => setMenuOpen(false)}
                   className="rounded-lg px-3 py-2.5 text-sm font-medium text-quaternary-700 hover:bg-quaternary-100 dark:text-gray-300 dark:hover:bg-gray-700">
                   {link.label}
-                </a>
+                </Link>
               ))}
             </nav>
           )}
-          <a href={loginCta.href}
+          <Link to={loginCta.href}
             className="block w-full rounded-xl border border-quaternary-200 py-2.5 text-center text-sm font-semibold text-quaternary-700 dark:border-gray-600 dark:text-gray-200">
             {loginCta.label}
-          </a>
+          </Link>
         </div>
       )}
     </header>

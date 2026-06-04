@@ -1,5 +1,4 @@
-/** Landing page hero — headline, subheadline, CTA, and dashboard screenshot. */
-
+import { Link } from 'react-router-dom';
 import dashboardImg from '@/assets/hero-image/dashboard.png';
 
 interface CtaLink {
@@ -34,12 +33,12 @@ const Hero = ({ headline, subheadline, primaryCta }: HeroProps) => (
           <p className="max-w-[320px] text-base leading-relaxed text-quaternary-500 sm:text-[1.0625rem] dark:text-gray-400">
             {subheadline}
           </p>
-          <a
-            href={primaryCta.href}
+          <Link
+            to={primaryCta.href}
             className="mt-1 inline-flex w-full items-center justify-center rounded-xl bg-primary px-8 py-3 text-base font-semibold text-white shadow-md shadow-primary-100 transition-all duration-200 hover:bg-primary-hover hover:-translate-y-px active:translate-y-0 sm:w-auto sm:py-3.5"
           >
             {primaryCta.label}
-          </a>
+          </Link>
         </div>
 
         {/* Dashboard screenshot — right column on desktop */}

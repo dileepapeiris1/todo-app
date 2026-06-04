@@ -1,5 +1,3 @@
-/** Press testimonials — auto-play carousel on mobile, three-column grid on desktop. */
-
 import { useEffect, useState } from 'react';
 
 interface PressQuoteItem {
