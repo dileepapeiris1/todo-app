@@ -1,5 +1,3 @@
-/** Tests for LoggerProvider — console delegation and useLogger hook. */
-
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { LoggerProvider, useLogger } from '@/providers/LoggerProvider';
