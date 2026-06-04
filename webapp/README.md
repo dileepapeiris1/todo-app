@@ -52,8 +52,11 @@ npm run coverage   # test coverage report
 ## Project structure
 
 ```
-src/
-├── App.tsx                    routing and provider wiring
+webapp/
+├── public/                    static assets
+│   └── favicon.svg            app favicon
+├── src/
+│   ├── App.tsx                    routing and provider wiring
 ├── main.tsx                   React root, wraps App with AuthProvider
 ├── index.css                  Tailwind import, dark variant, progress bar keyframe
 ├── vite-env.d.ts              vite/client type reference for SVG imports
