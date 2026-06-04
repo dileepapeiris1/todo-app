@@ -1,6 +1,7 @@
 // Third-party Libraries
 import { body, param } from "express-validator";
 
+
 // Internal Modules
 import { ValidationLimit } from "@/constants/validation";
 
@@ -27,3 +28,37 @@ export const descriptionRule = body("description")
   .withMessage(
     `Description cannot exceed ${ValidationLimit.DESCRIPTION_MAX_LENGTH} characters`,
   );
+
+/** Validate dueDate — optional ISO 8601 datetime, must be in the future. */
+export const dueDateRule = body("dueDate")
+  .optional({ values: "falsy" })
+  .isISO8601()
+  .withMessage("dueDate must be a valid ISO 8601 date")
+  .custom((value: string) => {
+    if (new Date(value) <= new Date()) {
+      throw new Error("dueDate must be a future date and time");
+    }
+    return true;
+  });
+
+/** Validate search query — required, max 200 chars. */
+export const searchQueryRule = body("query")
+  .trim()
+  .notEmpty()
+  .withMessage("Search query is required")
+  .isLength({ max: 200 })
+  .withMessage("Search query cannot exceed 200 characters");
+
+/** Validate offset in POST body — must be zero or greater. */
+export const offsetBodyRule = body("offset")
+  .optional()
+  .isInt({ min: 0 })
+  .withMessage("offset must be a non-negative integer")
+  .toInt();
+
+/** Validate limit in POST body. */
+export const limitBodyRule = body("limit")
+  .optional()
+  .isInt({ min: 1, max: 100 })
+  .withMessage("limit must be between 1 and 100")
+  .toInt();
