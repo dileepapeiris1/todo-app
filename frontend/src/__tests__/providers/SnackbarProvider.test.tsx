@@ -1,5 +1,3 @@
-/** Tests for SnackbarProvider — display, dismiss, and auto-close. */
-
 import { beforeEach, describe, it, expect, vi, afterEach } from 'vitest';
 import { act, render, screen, fireEvent } from '@testing-library/react';
 import { SnackbarProvider, useSnackbar } from '@/providers/SnackbarProvider';

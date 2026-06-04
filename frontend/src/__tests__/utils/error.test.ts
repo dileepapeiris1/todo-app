@@ -1,5 +1,3 @@
-/** Tests for error utility functions. */
-
 import { describe, it, expect } from 'vitest';
 import { getErrorStatus, toErrorInfo } from '@/utils/error';
 import { ApiError } from '@/services/api';

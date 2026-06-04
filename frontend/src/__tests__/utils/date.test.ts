@@ -1,5 +1,3 @@
-/** Tests for date formatting and comparison utilities. */
-
 import { describe, it, expect } from 'vitest';
 import {
   isToday, fmtTime, fmtDateLabel, toDateTimeLocal, nowDateTimeLocal,

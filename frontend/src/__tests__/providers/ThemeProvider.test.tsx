@@ -1,5 +1,3 @@
-/** Tests for ThemeProvider — enum values, toggle, and persistence. */
-
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Theme, ThemeProvider, useTheme } from '@/providers/ThemeProvider';
