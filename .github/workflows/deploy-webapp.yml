@@ -1,0 +1,52 @@
+name: Deploy Webapp to GitHub Pages
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'webapp/**'
+      - 'package.json'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/deploy-webapp.yml'
+
+# Permissions required to write to the gh-pages branch
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build Webapp
+        env:
+          GH_PAGES: true
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+        run: |
+          pnpm build
+          cp webapp/dist/index.html webapp/dist/404.html
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: webapp/dist
+          branch: gh-pages

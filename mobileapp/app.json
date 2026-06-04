@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "TrackLog",
+    "slug": "tracklog",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#e44332",
+      "resizeMode": "contain"
+    },
+    "scheme": "tracklog",
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.tracklog.app",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.tracklog.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#e44332"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/icon.svg"
+    }
+  }
+}

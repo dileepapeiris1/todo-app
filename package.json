@@ -1,0 +1,11 @@
+{
+  "name": "todo-app",
+  "private": true,
+  "scripts": {
+    "dev:webapp": "pnpm --filter webapp dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:mobile": "pnpm --filter tracklog-mobile start",
+    "dev": "pnpm --parallel run '/^dev:/'",
+    "build": "pnpm --filter webapp build"
+  }
+}

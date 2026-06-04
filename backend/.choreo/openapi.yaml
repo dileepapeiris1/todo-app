@@ -1,0 +1,379 @@
+openapi: "3.0.3"
+info:
+  title: Todo API
+  version: "1.0.0"
+servers:
+  - url: /
+security: []
+paths:
+  /api/v1/auth/google:
+    post:
+      summary: Sign in with Google
+      operationId: googleSignIn
+      tags: [Auth]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [credential]
+              properties:
+                credential:
+                  type: string
+                  description: Google ID token from Google Identity Services
+      responses:
+        "200":
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Missing credential
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Invalid Google token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/todos:
+    get:
+      summary: Get todos for the authenticated user (offset-paginated, sortable)
+      operationId: getAllTodos
+      tags: [Todos]
+      security: []
+      parameters:
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Number of records to skip
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Maximum number of records to return
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [createdAt, dueDate, title]
+            default: createdAt
+          description: Field to sort results by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+          description: Sort direction
+      responses:
+        "200":
+          description: Paginated list of todos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedTodoResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Create a todo
+      operationId: createTodo
+      tags: [Todos]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/todos/search:
+    post:
+      summary: Search todos by title or description (offset-paginated)
+      operationId: searchTodos
+      tags: [Todos]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchBody"
+      responses:
+        "200":
+          description: Paginated search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedTodoResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/todos/{id}:
+    put:
+      summary: Update a todo's title, description, and due date
+      operationId: updateTodo
+      tags: [Todos]
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/TodoId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Todo not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      summary: Delete a todo
+      operationId: deleteTodo
+      tags: [Todos]
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/TodoId"
+      responses:
+        "200":
+          description: Deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Todo not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/todos/{id}/done:
+    patch:
+      summary: Toggle todo done status
+      operationId: toggleDone
+      tags: [Todos]
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/TodoId"
+      responses:
+        "200":
+          description: Toggled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Todo"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Todo not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  parameters:
+    TodoId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: MongoDB ObjectId of the todo
+
+  schemas:
+    Todo:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        done:
+          type: boolean
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    TodoBody:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          maxLength: 1000
+        dueDate:
+          type: string
+          format: date-time
+          description: Must be a future date and time (ISO 8601)
+
+    SearchBody:
+      type: object
+      required: [searchQuery]
+      properties:
+        searchQuery:
+          type: string
+          maxLength: 200
+          description: Case-insensitive search term matched against title and description
+        offset:
+          type: integer
+          minimum: 0
+          default: 0
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+
+    PaginatedTodoResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Todo"
+        total:
+          type: integer
+          description: Total number of matching records
+        offset:
+          type: integer
+          description: Number of records skipped
+        limit:
+          type: integer
+          description: Max records returned
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+            name:
+              type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              msg:
+                type: string
+              path:
+                type: string
+              location:
+                type: string
+              value: {}
