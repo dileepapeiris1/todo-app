@@ -4,13 +4,15 @@ import { RequestHandler } from "express";
 // Internal Modules
 import { ErrorMessage } from "@/constants/errors";
 import { HttpStatus } from "@/constants/http";
+import { VALID_SORT_BY, VALID_SORT_ORDER } from "@/constants/sort";
 import * as todoService from "@/services/service";
 import { PaginatedResult } from "@/types/pagination";
 import { ITodoDocument } from "@/types/todo";
 import { ErrorResponse } from "@/types/error";
+import { SortBy, SortOrder } from "@/types/sort";
 import { CreateTodoBody, SearchTodoBody, TodoIdParam, UpdateTodoBody } from "@/types/request";
 
-/** GET /api/v1/todos?offset=0&limit=10 — paginated todos for the authenticated user. */
+/** GET /api/v1/todos?offset=0&limit=10&sortBy=createdAt&sortOrder=desc */
 export const getAllTodos: RequestHandler<
   {},
   PaginatedResult<ITodoDocument> | ErrorResponse
@@ -18,7 +20,13 @@ export const getAllTodos: RequestHandler<
   try {
     const offset = Math.max(0, parseInt(req.query.offset as string) || 0);
     const limit  = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 10));
-    const result = await todoService.findAllTodos(req.userId!, offset, limit);
+    const sortBy: SortBy       = VALID_SORT_BY.includes(req.query.sortBy as SortBy)
+      ? (req.query.sortBy as SortBy)
+      : "createdAt";
+    const sortOrder: SortOrder = VALID_SORT_ORDER.includes(req.query.sortOrder as SortOrder)
+      ? (req.query.sortOrder as SortOrder)
+      : "desc";
+    const result = await todoService.findAllTodos(req.userId!, offset, limit, sortBy, sortOrder);
     res.status(HttpStatus.OK).json(result);
   } catch (err) {
     next(err);
@@ -32,8 +40,8 @@ export const searchTodos: RequestHandler<
   SearchTodoBody
 > = async (req, res, next): Promise<void> => {
   try {
-    const { query, offset = 0, limit = 10 } = req.body;
-    const result = await todoService.searchTodos(req.userId!, query, offset, limit);
+    const { searchQuery, offset = 0, limit = 10 } = req.body;
+    const result = await todoService.searchTodos(req.userId!, searchQuery, offset, limit);
     res.status(HttpStatus.OK).json(result);
   } catch (err) {
     next(err);
@@ -61,11 +69,7 @@ export const updateTodo: RequestHandler<
   UpdateTodoBody
 > = async (req, res, next): Promise<void> => {
   try {
-    const todo = await todoService.updateTodo(
-      req.userId!,
-      req.params.id,
-      req.body,
-    );
+    const todo = await todoService.updateTodo(req.userId!, req.params.id, req.body);
     res.status(HttpStatus.OK).json(todo);
   } catch (err: unknown) {
     if (err instanceof Error && err.message === ErrorMessage.TODO_NOT_FOUND) {
