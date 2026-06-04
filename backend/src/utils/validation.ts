@@ -41,13 +41,13 @@ export const dueDateRule = body("dueDate")
     return true;
   });
 
-/** Validate search query — required, max 200 chars. */
-export const searchQueryRule = body("query")
+/** Validate searchQuery — required, max 200 chars. */
+export const searchQueryRule = body("searchQuery")
   .trim()
   .notEmpty()
-  .withMessage("Search query is required")
+  .withMessage("searchQuery is required")
   .isLength({ max: 200 })
-  .withMessage("Search query cannot exceed 200 characters");
+  .withMessage("searchQuery cannot exceed 200 characters");
 
 /** Validate offset in POST body — must be zero or greater. */
 export const offsetBodyRule = body("offset")
