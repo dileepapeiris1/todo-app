@@ -1,0 +1,11 @@
+schemaVersion: "1.2"
+endpoints:
+  - name: todo-api
+    displayName: todo-api
+    service:
+      basePath: /
+      port: 5000
+    type: REST
+    schemaFilePath: .choreo/openapi.yaml
+    networkVisibilities:
+      - Public
