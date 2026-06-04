@@ -41,7 +41,9 @@ jobs:
           GH_PAGES: true
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
-        run: pnpm build
+        run: |
+          pnpm build
+          cp webapp/dist/index.html webapp/dist/404.html
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4

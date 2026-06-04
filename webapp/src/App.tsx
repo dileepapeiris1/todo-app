@@ -19,7 +19,7 @@ const App = () => (
   <LoggerProvider>
     <QueryProvider>
       <SnackbarProvider>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path={ROUTES.APP}    element={<Root />} />
             <Route path={ROUTES.HOME}   element={<LandingPage />} />
