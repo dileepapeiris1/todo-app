@@ -1,6 +1,6 @@
 # TrackLog — Backend
 
-Node.js REST API for the TrackLog task manager. Built with Express, TypeScript, and MongoDB.
+Node.js REST API for the TrackLog todo app. Built with Express, TypeScript, and MongoDB.
 
 ---
 

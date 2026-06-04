@@ -1,6 +1,6 @@
 # TrackLog — Web App
 
-React web app for the TrackLog task manager. Built with Vite, TypeScript, Tailwind CSS, and TanStack Query.
+React web app for the TrackLog todo app. Built with Vite, TypeScript, Tailwind CSS, and TanStack Query.
 
 ---
 

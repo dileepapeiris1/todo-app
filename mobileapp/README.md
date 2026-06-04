@@ -1,6 +1,6 @@
 # TrackLog — Mobile App
 
-React Native mobile app for the TrackLog task manager. Built with Expo, TypeScript, TanStack Query, and Lucide React Icons.
+React Native mobile app for the TrackLog todo app. Built with Expo, TypeScript, TanStack Query, and Lucide React Icons.
 
 ---
 

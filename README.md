@@ -96,22 +96,7 @@ The backend runs on `http://localhost:5000` and the webapp on `http://localhost:
 | Database | MongoDB via Mongoose |
 | Auth | Google OAuth 2.0 + JWT |
 | Backend validation | express-validator |
-| Deployment | Choreo (WSO2) |
 | Package manager | pnpm (workspaces) |
-
----
-
-## Deployment
-
-The backend is deployed on Choreo as a Node.js service connected to a MongoDB Atlas database.
-
-The webapp is deployed on Choreo as a web application with these build settings:
-
-- **Build command:** `npm run build`
-- **Build output:** `dist`
-- **Node version:** 20
-
-Each component has its own Choreo component definition under `backend/.choreo/`.
 
 ---
 
