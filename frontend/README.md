@@ -197,20 +197,12 @@ On small screens the sidebar becomes a bottom sheet that slides up. The hamburge
 
 ---
 
-## Assumptions and limitations
+## Assumptions
 
-The app assumes you are signed in with Google. There is no anonymous or email/password login.
+Authentication is Google-only. There is no email/password or anonymous login path.
 
-Session tokens expire after 7 days. When one expires, the user will be redirected to the sign-in page on the next request.
+Session tokens expire after 7 days. When one expires the user is redirected to the sign-in page on the next request.
 
-The todo list fetches up to 10 items per page. Older todos load as the user scrolls down. There is no jump-to-page or search within the paginated list (use the search bar instead).
+The `datetime-local` input does not carry timezone information. Due times are treated as local browser time.
 
-Search is a substring match on title and description — it does not rank results by relevance.
-
-The dueDate picker uses `datetime-local` which does not include timezone info. Times are treated as local time in the browser. If a user switches timezones, due times will appear offset.
-
-The app is English-only. There is no i18n setup.
-
-The error SVG illustrations are large files (~800KB each). They are only loaded when an error actually occurs.
-
-There is no offline support or service worker. If the backend is unreachable, the app will show error states.
+The app is English-only.

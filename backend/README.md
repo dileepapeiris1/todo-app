@@ -189,18 +189,12 @@ Full request/response examples with field tables are in `API_REFERENCE.md`.
 
 ---
 
-## Assumptions and limitations
+## Assumptions
 
-One user cannot see another user's todos — `userId` is always from the verified JWT, never from the request body.
+One user cannot see another user's todos — `userId` is always taken from the verified JWT, never from the request body.
 
-There is no admin panel or bulk operations endpoint.
+The `dueDate` validation rejects past dates at write time. A todo with a future date stays in the database after that date passes — the user removes it manually.
 
-The `dueDate` validation rejects past dates at write time. A todo with a future date does not expire automatically — once the date passes, the todo stays in the database until the user deletes it.
+Tokens expire after 7 days. After expiry the user signs in again through Google.
 
-Search is a substring match on title and description. For very large datasets a proper full-text index (MongoDB Atlas Search) would perform much better.
-
-Tokens expire after 7 days with no refresh flow. After expiry the user must sign in again through Google.
-
-Rate limits are per IP address. If multiple users share a NAT IP (like an office), they share the limit.
-
-The app does not send emails or notifications of any kind.
+The app does not send emails or notifications.
