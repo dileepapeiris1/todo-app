@@ -17,7 +17,7 @@ export interface UpdateTodoBody {
 
 /** Body for POST /api/todos/search */
 export interface SearchTodoBody {
-  query: string;
+  searchQuery: string;
   offset?: number;
   limit?: number;
 }
