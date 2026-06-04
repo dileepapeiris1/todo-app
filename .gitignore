@@ -42,7 +42,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Screenshots captured during development
-*.png
-*.jpg
-*.jpeg
+# Dev screenshots at repo root only (src/assets images are not ignored)
+/*.png
+/*.jpg
+/*.jpeg

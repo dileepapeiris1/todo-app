@@ -40,7 +40,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Screenshots captured during development
-*.png
-*.jpg
-*.jpeg
+# Dev screenshots at frontend root only (src/assets images are not ignored)
+/*.png
+/*.jpg
+/*.jpeg
