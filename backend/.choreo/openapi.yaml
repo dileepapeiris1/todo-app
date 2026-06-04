@@ -45,19 +45,51 @@ paths:
 
   /api/v1/todos:
     get:
-      summary: Get all todos for the authenticated user
+      summary: Get todos for the authenticated user (offset-paginated, sortable)
       operationId: getAllTodos
       tags: [Todos]
       security: []
+      parameters:
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Number of records to skip
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Maximum number of records to return
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [createdAt, dueDate, title]
+            default: createdAt
+          description: Field to sort results by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+          description: Sort direction
       responses:
         "200":
-          description: List of todos
+          description: Paginated list of todos
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Todo"
+                $ref: "#/components/schemas/PaginatedTodoResponse"
         "401":
           description: Unauthorized
           content:
@@ -87,7 +119,39 @@ paths:
           content:
             application/json:
               schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/todos/search:
+    post:
+      summary: Search todos by title or description (offset-paginated)
+      operationId: searchTodos
+      tags: [Todos]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchBody"
+      responses:
+        "200":
+          description: Paginated search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedTodoResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
           content:
@@ -97,7 +161,7 @@ paths:
 
   /api/v1/todos/{id}:
     put:
-      summary: Update a todo title and description
+      summary: Update a todo's title, description, and due date
       operationId: updateTodo
       tags: [Todos]
       security: []
@@ -121,7 +185,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
           content:
@@ -208,12 +272,18 @@ components:
       properties:
         _id:
           type: string
+        userId:
+          type: string
         title:
           type: string
         description:
           type: string
         done:
           type: boolean
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
         createdAt:
           type: string
           format: date-time
@@ -227,8 +297,49 @@ components:
       properties:
         title:
           type: string
+          maxLength: 200
         description:
           type: string
+          maxLength: 1000
+        dueDate:
+          type: string
+          format: date-time
+          description: Must be a future date and time (ISO 8601)
+
+    SearchBody:
+      type: object
+      required: [searchQuery]
+      properties:
+        searchQuery:
+          type: string
+          maxLength: 200
+          description: Case-insensitive search term matched against title and description
+        offset:
+          type: integer
+          minimum: 0
+          default: 0
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+
+    PaginatedTodoResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Todo"
+        total:
+          type: integer
+          description: Total number of matching records
+        offset:
+          type: integer
+          description: Number of records skipped
+        limit:
+          type: integer
+          description: Max records returned
 
     AuthResponse:
       type: object
@@ -250,3 +361,19 @@ components:
       properties:
         message:
           type: string
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              msg:
+                type: string
+              path:
+                type: string
+              location:
+                type: string
+              value: {}
