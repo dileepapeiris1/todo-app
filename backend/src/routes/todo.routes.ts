@@ -1,5 +1,5 @@
 // Third-party Libraries
-import { Router } from "express";
+import { Router, type IRouter } from "express";
 
 // Internal Modules
 import {
@@ -23,7 +23,7 @@ import {
 } from "@/utils/validation";
 
 /** Todo routes — all protected by JWT authentication. */
-const router = Router();
+const router: IRouter = Router();
 
 router.use(authenticate);
 

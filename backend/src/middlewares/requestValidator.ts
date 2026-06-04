@@ -13,7 +13,7 @@ import { toValidationErrorResponse } from "@/utils/response";
  * @param next - Express next function
  * @returns 400 with validation errors if any validator chain failed
  */
-export const validate: RequestHandler = (req, res, next): void => {
+export const validate: RequestHandler<any> = (req, res, next): void => {
   const result = validationResult(req);
 
   if (!result.isEmpty()) {

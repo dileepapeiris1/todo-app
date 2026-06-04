@@ -1,6 +1,3 @@
-// Third-party Libraries
-import { ParamsDictionary } from "express-serve-static-core";
-
 /** Body for POST /api/todos */
 export interface CreateTodoBody {
   title: string;
@@ -23,8 +20,9 @@ export interface SearchTodoBody {
 }
 
 /** Route params for endpoints that require an :id. */
-export interface TodoIdParam extends ParamsDictionary {
+export interface TodoIdParam {
   id: string;
+  [key: string]: string;
 }
 
 /**
