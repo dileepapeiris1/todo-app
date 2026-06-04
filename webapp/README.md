@@ -12,8 +12,8 @@ Prerequisites: Node.js 20+, a running instance of the backend API.
 # install dependencies
 npm install
 
-# copy env and fill in the values
-cp .env.example .env
+# copy config and fill in the values
+cp public/config.js.example public/config.js
 
 # start the dev server
 npm run dev
@@ -23,16 +23,19 @@ The app runs at `http://localhost:5173` by default.
 
 ---
 
-## Environment variables
+## Runtime Configuration
 
+Configuration is managed at runtime via `public/config.js`. This allows settings to be updated dynamically without rebuilding the web app bundle.
+
+```javascript
+window.APP_CONFIG = {
+  API_URL: 'http://localhost:5000',
+  GOOGLE_CLIENT_ID: 'your_google_oauth_client_id'
+};
 ```
-VITE_API_URL=http://localhost:5000
-VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
-```
 
-`VITE_API_URL` — the base URL of the backend. For local dev this is `http://localhost:5000`. For Choreo deployments it will be something like `https://your-backend.choreoapis.dev`.
-
-`VITE_GOOGLE_CLIENT_ID` — same client ID used in the backend. The webapp uses the Google Identity Services SDK to get a credential token which is then sent to the backend for verification.
+- **`API_URL`**: The base URL of the backend API. For local development, this is `http://localhost:5000`. For deployment, set this to your hosted backend URL.
+- **`GOOGLE_CLIENT_ID`**: The Google OAuth 2.0 Client ID (same one used in the backend).
 
 ---
 
