@@ -115,17 +115,14 @@ Each component has its own Choreo component definition under `backend/.choreo/`.
 
 ---
 
-## Configuration & Environment variables
+## Environment variables
 
-The backend and mobileapp need environment variables, while the webapp uses a runtime configuration file. Copy the examples and fill in the values:
+The backend, webapp, and mobileapp each need their own `.env` file. Copy the examples and fill in the values:
 
 ```bash
-# Backend & Mobile App (.env)
 cp backend/.env.example backend/.env
+cp webapp/.env.example webapp/.env
 cp mobileapp/.env.example mobileapp/.env
-
-# Web App (runtime config.js)
-cp webapp/public/config.js.example webapp/public/config.js
 ```
 
-See each package README for the full configuration reference.
+See each package README for the full variable reference.
