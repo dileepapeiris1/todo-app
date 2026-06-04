@@ -4,6 +4,7 @@ import { useAddTodo, useDeleteTodo, useToggleTodo, useUpdateTodo } from '@/hooks
 import AppLayout    from '@/components/common/AppLayout';
 import AddForm      from '@/components/dashboard/AddForm';
 import DateSection  from '@/components/dashboard/DateSection';
+import DeleteConfirmModal from '@/components/dashboard/DeleteConfirmModal';
 import EditForm     from '@/components/dashboard/EditForm';
 import EmptySearch  from '@/components/dashboard/EmptySearch';
 import EmptyTodos   from '@/components/dashboard/EmptyTodos';
@@ -60,6 +61,7 @@ const TodoPage = () => {
   const [sortBy,    setSortBy]    = useState<SortField>(SortField.DueDate);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Asc);
   const [searchInput, setSearchInput] = useState('');
+  const [deleteConfirm, setDeleteConfirm] = useState<Nullable<{ id: string; fromSearch: boolean }>>(null);
 
   // Search
   const [searchData,    setSearchData]    = useState<Todo[]>([]);
@@ -193,6 +195,16 @@ const TodoPage = () => {
     deleteMutation.mutate(id);
   }
 
+  const confirmDelete = useCallback(() => {
+    if (!deleteConfirm) return;
+    if (deleteConfirm.fromSearch) {
+      handleSearchDelete(deleteConfirm.id);
+    } else {
+      deleteMutation.mutate(deleteConfirm.id);
+    }
+    setDeleteConfirm(null);
+  }, [deleteConfirm, deleteMutation]);
+
   // Row renderers
   function renderRow(todo: Todo) {
     if (editingId === todo._id) {
@@ -212,7 +224,7 @@ const TodoPage = () => {
         todo={todo}
         onToggle={() => toggleMutation.mutate(todo)}
         onEdit={() => setEditingId(todo._id)}
-        onDelete={() => deleteMutation.mutate(todo._id)}
+        onDelete={() => setDeleteConfirm({ id: todo._id, fromSearch: false })}
       />
     );
   }
@@ -235,7 +247,7 @@ const TodoPage = () => {
         todo={todo}
         onToggle={() => handleSearchToggle(todo)}
         onEdit={() => setEditingId(todo._id)}
-        onDelete={() => handleSearchDelete(todo._id)}
+        onDelete={() => setDeleteConfirm({ id: todo._id, fromSearch: true })}
       />
     );
   }
@@ -327,7 +339,7 @@ const TodoPage = () => {
                 onSave={(id, data) => { updateMutation.mutate({ id, data }); setEditingId(null); }}
                 onCancelEdit={() => setEditingId(null)}
                 onToggle={todo => toggleMutation.mutate(todo)}
-                onDelete={id => deleteMutation.mutate(id)}
+                onDelete={id => setDeleteConfirm({ id, fromSearch: false })}
               />
             ))}
             {hasNextPage && <div ref={todosSentinel} className="h-1" />}
@@ -354,13 +366,20 @@ const TodoPage = () => {
                 onSave={(id, data) => { updateMutation.mutate({ id, data }); setEditingId(null); }}
                 onCancelEdit={() => setEditingId(null)}
                 onToggle={todo => toggleMutation.mutate(todo)}
-                onDelete={id => deleteMutation.mutate(id)}
+                onDelete={id => setDeleteConfirm({ id, fromSearch: false })}
               />
             ))}
             {hasNextPage && <div ref={todosSentinel} className="h-1" />}
             {isFetchingNextPage && <Skeleton />}
           </>
         )
+      )}
+
+      {deleteConfirm && (
+        <DeleteConfirmModal
+          onConfirm={confirmDelete}
+          onCancel={() => setDeleteConfirm(null)}
+        />
       )}
     </AppLayout>
   );
