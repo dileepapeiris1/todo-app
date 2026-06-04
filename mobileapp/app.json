@@ -4,13 +4,11 @@
     "slug": "tracklog",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#e44332",
+      "resizeMode": "contain"
     },
     "scheme": "tracklog",
     "plugins": [
@@ -24,15 +22,12 @@
     "android": {
       "package": "com.tracklog.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#e44332"
       }
     },
     "web": {
-      "bundler": "metro"
-    },
-    "experiments": {
-      "typedRoutes": true
+      "bundler": "metro",
+      "favicon": "./assets/icon.svg"
     }
   }
 }
