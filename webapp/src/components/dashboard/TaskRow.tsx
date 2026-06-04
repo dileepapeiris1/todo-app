@@ -57,13 +57,13 @@ const TaskRow = ({ todo, onToggle, onEdit, onDelete }: Props) => (
       )}
     </div>
 
-    <div className="mt-0.5 flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+    <div className="mt-0.5 flex shrink-0 items-center gap-0.5 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
       <button onClick={onEdit} aria-label="Edit"
-        className="flex h-6 w-6 items-center justify-center rounded text-quaternary-300 transition-colors hover:text-quaternary-600 dark:text-gray-600 dark:hover:text-gray-300">
+        className="flex h-6 w-6 items-center justify-center rounded text-quaternary-300 transition-colors hover:text-quaternary-600 dark:text-gray-400 dark:hover:text-gray-200">
         <Pencil className="h-3.5 w-3.5" />
       </button>
       <button onClick={onDelete} aria-label="Delete"
-        className="flex h-6 w-6 items-center justify-center rounded text-quaternary-300 transition-colors hover:text-primary dark:text-gray-600 dark:hover:text-primary">
+        className="flex h-6 w-6 items-center justify-center rounded text-quaternary-300 transition-colors hover:text-primary dark:text-gray-400 dark:hover:text-primary">
         <Trash2 className="h-3.5 w-3.5" />
       </button>
     </div>

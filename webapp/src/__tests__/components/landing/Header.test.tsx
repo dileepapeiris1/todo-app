@@ -1,7 +1,7 @@
 import { beforeEach, describe, it, expect } from 'vitest';
 import { screen, fireEvent } from '@testing-library/react';
 import Header from '@/components/common/header/Header';
-import { renderWithProviders } from '../../helpers';
+import { renderWithProviders } from '@/__tests__/helpers';
 
 const defaultProps = {
   brand:    'TrackLog',

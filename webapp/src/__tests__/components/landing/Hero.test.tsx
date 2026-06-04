@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { screen } from '@testing-library/react';
 import Hero from '@/components/landing/Hero';
-import { renderWithProviders } from '../../helpers';
+import { renderWithProviders } from '@/__tests__/helpers';
 
 const props = {
   headline:    'Organize your work.\nGet things done.',

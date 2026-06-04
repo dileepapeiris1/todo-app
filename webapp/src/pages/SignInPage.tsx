@@ -147,10 +147,14 @@ const SignInPage = () => {
             </div>
           ) : (
             <div className="relative flex min-h-[44px] w-[280px] items-center justify-center">
-              {/* Skeleton — visible while the Google SDK script is still loading */}
+              {/* Loader — visible while the Google SDK script is still loading */}
               {!buttonReady && (
-                <div className="absolute inset-0 flex items-center">
-                  <div className="h-[44px] w-full animate-pulse rounded-md bg-quaternary-100 dark:bg-gray-700" />
+                <div className="flex h-11 items-center gap-2 text-sm text-quaternary-400 dark:text-gray-400">
+                  <svg className="h-4 w-4 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  <span>Loading Google login...</span>
                 </div>
               )}
               {/* Google renders its button into this div */}

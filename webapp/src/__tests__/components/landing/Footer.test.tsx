@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { screen } from '@testing-library/react';
 import Footer from '@/components/common/footer/Footer';
-import { renderWithProviders } from '../../helpers';
+import { renderWithProviders } from '@/__tests__/helpers';
 
 describe('Footer', () => {
   it('renders the brand name as a link', () => {
