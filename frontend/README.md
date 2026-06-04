@@ -197,12 +197,10 @@ On small screens the sidebar becomes a bottom sheet that slides up. The hamburge
 
 ---
 
-## Assumptions
+## Assumptions and Limitations
 
 Authentication is Google-only. There is no email/password or anonymous login path.
 
 Session tokens expire after 7 days. When one expires the user is redirected to the sign-in page on the next request.
 
 The `datetime-local` input does not carry timezone information. Due times are treated as local browser time.
-
-The app is English-only.

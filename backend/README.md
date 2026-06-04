@@ -189,7 +189,7 @@ Full request/response examples with field tables are in `API_REFERENCE.md`.
 
 ---
 
-## Assumptions
+## Assumptions and Limitations
 
 One user cannot see another user's todos — `userId` is always taken from the verified JWT, never from the request body.
 
