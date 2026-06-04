@@ -5,24 +5,42 @@ import { RequestHandler } from "express";
 import { ErrorMessage } from "@/constants/errors";
 import { HttpStatus } from "@/constants/http";
 import * as todoService from "@/services/service";
+import { PaginatedResult } from "@/types/pagination";
 import { ITodoDocument } from "@/types/todo";
 import { ErrorResponse } from "@/types/error";
-import { CreateTodoBody, TodoIdParam, UpdateTodoBody } from "@/types/request";
+import { CreateTodoBody, SearchTodoBody, TodoIdParam, UpdateTodoBody } from "@/types/request";
 
-/** GET /api/todos — get all todos for the authenticated user. */
+/** GET /api/v1/todos?offset=0&limit=10 — paginated todos for the authenticated user. */
 export const getAllTodos: RequestHandler<
   {},
-  ITodoDocument[] | ErrorResponse
+  PaginatedResult<ITodoDocument> | ErrorResponse
 > = async (req, res, next): Promise<void> => {
   try {
-    const todos = await todoService.findAllTodos(req.userId!);
-    res.status(HttpStatus.OK).json(todos);
+    const offset = Math.max(0, parseInt(req.query.offset as string) || 0);
+    const limit  = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 10));
+    const result = await todoService.findAllTodos(req.userId!, offset, limit);
+    res.status(HttpStatus.OK).json(result);
   } catch (err) {
     next(err);
   }
 };
 
-/** POST /api/todos — create a todo for the authenticated user. */
+/** POST /api/v1/todos/search — search todos by title/description with offset pagination. */
+export const searchTodos: RequestHandler<
+  {},
+  PaginatedResult<ITodoDocument> | ErrorResponse,
+  SearchTodoBody
+> = async (req, res, next): Promise<void> => {
+  try {
+    const { query, offset = 0, limit = 10 } = req.body;
+    const result = await todoService.searchTodos(req.userId!, query, offset, limit);
+    res.status(HttpStatus.OK).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+/** POST /api/v1/todos — create a todo for the authenticated user. */
 export const createTodo: RequestHandler<
   {},
   ITodoDocument | ErrorResponse,
@@ -36,7 +54,7 @@ export const createTodo: RequestHandler<
   }
 };
 
-/** PUT /api/todos/:id — update title and description. */
+/** PUT /api/v1/todos/:id — update title, description, and due date. */
 export const updateTodo: RequestHandler<
   TodoIdParam,
   ITodoDocument | ErrorResponse,
@@ -58,7 +76,7 @@ export const updateTodo: RequestHandler<
   }
 };
 
-/** PATCH /api/todos/:id/done — toggle done status. */
+/** PATCH /api/v1/todos/:id/done — toggle done status. */
 export const toggleDone: RequestHandler<
   TodoIdParam,
   ITodoDocument | ErrorResponse
@@ -75,7 +93,7 @@ export const toggleDone: RequestHandler<
   }
 };
 
-/** DELETE /api/todos/:id — delete a todo. */
+/** DELETE /api/v1/todos/:id — delete a todo. */
 export const deleteTodo: RequestHandler<
   TodoIdParam,
   { message: string } | ErrorResponse

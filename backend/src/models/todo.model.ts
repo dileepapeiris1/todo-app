@@ -37,6 +37,10 @@ const todoSchema = new Schema<ITodoDocument>(
       type: Boolean,
       default: false,
     },
+    dueDate: {
+      type: Date,
+      required: false,
+    },
   },
   { timestamps: true },
 );
