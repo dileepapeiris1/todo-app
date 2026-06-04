@@ -4,7 +4,6 @@ info:
   version: "1.0.0"
 servers:
   - url: /
-# No gateway-level security — the Express backend handles all auth via JWT middleware.
 security: []
 paths:
   /api/v1/auth/google:
