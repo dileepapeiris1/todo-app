@@ -1,5 +1,3 @@
-/** Shared colour palette — mirrors the web app's primary brand colours. */
-
 export const COLORS = {
   primary:    '#e44332',
   background: '#ffffff',

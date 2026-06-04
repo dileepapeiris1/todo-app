@@ -1,5 +1,3 @@
-/** HTTP client — wraps fetch with auth headers and structured error handling. */
-
 import * as SecureStore from 'expo-secure-store';
 import { TOKEN_KEY } from '@/constants/storage';
 

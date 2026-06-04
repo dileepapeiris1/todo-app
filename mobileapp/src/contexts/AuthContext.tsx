@@ -1,5 +1,3 @@
-/** Authentication context — stores token and user using SecureStore. */
-
 import {
   createContext, useCallback, useContext, useEffect, useState, type ReactNode,
 } from 'react';

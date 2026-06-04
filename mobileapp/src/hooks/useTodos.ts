@@ -1,12 +1,9 @@
-/** TanStack Query hooks for fetching todos in the mobile app. */
-
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { LOAD_LIMIT, PAGE_SIZE, QUERY_KEYS } from '@/constants/api';
+import { PAGE_SIZE, QUERY_KEYS } from '@/constants/api';
 import { API_URL } from '@/constants/config';
 import { api, ApiError } from '@/services/api';
 import { SortField, SortOrder } from '@/types/sorting';
 import type { Paginated } from '@/types/pagination';
-import type { SearchTodosRequest } from '@/types/requests';
 import type { Todo } from '@/types/todo';
 
 export async function fetchTodosPage(

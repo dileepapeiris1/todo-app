@@ -1,5 +1,3 @@
-/** TanStack Query mutation hooks for creating, updating, toggling, and deleting todos. */
-
 import { useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/constants/api';

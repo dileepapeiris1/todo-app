@@ -1,5 +1,3 @@
-/** Global snackbar provider — surfaces success and error toast notifications via Alert. */
-
 import {
   createContext, useCallback, useContext, useState, type ReactNode,
 } from 'react';
@@ -23,7 +21,6 @@ export function SnackbarProvider({ children }: { children: ReactNode }) {
     if (type === SnackType.Error) {
       Alert.alert('Error', message);
     }
-    // Success messages are silent on mobile — the UI updates immediately
   }, []);
 
   return (

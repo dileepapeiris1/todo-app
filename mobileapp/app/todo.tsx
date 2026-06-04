@@ -1,9 +1,9 @@
-/** Main todo page — orchestrates views, search, sorting, and CRUD. */
-
 import {
-  FlatList, RefreshControl, SafeAreaView, StyleSheet,
+  FlatList, Modal, RefreshControl, StyleSheet,
   Text, TextInput, TouchableOpacity, View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Plus, X } from 'lucide-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
@@ -49,6 +49,7 @@ export default function TodoPage() {
   const { user, signOut } = useAuth();
   const router             = useRouter();
 
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [activeView, setActiveView] = useState<AppView>(AppView.Today);
   const [editingTodo, setEditingTodo] = useState<Nullable<Todo>>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -171,7 +172,7 @@ export default function TodoPage() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.brand}>{APP_NAME}</Text>
-        <TouchableOpacity onPress={handleSignOut}>
+        <TouchableOpacity onPress={() => setShowProfileModal(true)}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
               {user?.name?.charAt(0).toUpperCase() ?? '?'}
@@ -191,8 +192,8 @@ export default function TodoPage() {
           returnKeyType="search"
         />
         {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearBtn}>
-            <Text style={styles.clearText}>✕</Text>
+          <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearBtn} accessibilityLabel="Clear search">
+            <X size={18} color="#94a3b8" />
           </TouchableOpacity>
         )}
       </View>
@@ -249,8 +250,8 @@ export default function TodoPage() {
       )}
 
       {/* FAB — add task */}
-      <TouchableOpacity style={styles.fab} onPress={() => setShowAddForm(true)}>
-        <Text style={styles.fabText}>＋</Text>
+      <TouchableOpacity style={styles.fab} onPress={() => setShowAddForm(true)} accessibilityLabel="Add task">
+        <Plus size={28} color="#ffffff" />
       </TouchableOpacity>
 
       {/* Add form modal */}
@@ -269,6 +270,56 @@ export default function TodoPage() {
         onSave={(id, data) => { updateMutation.mutate({ id, data }); setEditingTodo(null); }}
         onCancel={() => setEditingTodo(null)}
       />
+
+      {/* User profile details & logout modal */}
+      <Modal
+        visible={showProfileModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowProfileModal(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowProfileModal(false)}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.profileCard}
+          >
+            {/* Close button */}
+            <TouchableOpacity
+              style={styles.modalCloseBtn}
+              onPress={() => setShowProfileModal(false)}
+              accessibilityLabel="Close profile"
+            >
+              <X size={20} color="#64748b" />
+            </TouchableOpacity>
+
+            {/* User Info */}
+            <View style={styles.profileInfoContainer}>
+              <View style={styles.largeAvatar}>
+                <Text style={styles.largeAvatarText}>
+                  {user?.name?.charAt(0).toUpperCase() ?? '?'}
+                </Text>
+              </View>
+              <Text style={styles.profileName}>{user?.name ?? 'Guest User'}</Text>
+              <Text style={styles.profileEmail}>{user?.email ?? 'No email available'}</Text>
+            </View>
+
+            {/* Logout Button */}
+            <TouchableOpacity
+              style={styles.logoutBtn}
+              onPress={() => {
+                setShowProfileModal(false);
+                handleSignOut();
+              }}
+            >
+              <Text style={styles.logoutBtnText}>Log Out</Text>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -393,5 +444,81 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#ffffff',
     lineHeight: 32,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  profileCard: {
+    width: '100%',
+    maxWidth: 300,
+    backgroundColor: '#ffffff',
+    borderRadius: 24,
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    alignItems: 'center',
+    position: 'relative',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 30,
+    elevation: 10,
+  },
+  modalCloseBtn: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#f1f5f9',
+  },
+  profileInfoContainer: {
+    alignItems: 'center',
+    marginBottom: 28,
+    marginTop: 8,
+  },
+  largeAvatar: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: '#6366f1',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+    shadowColor: '#6366f1',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  largeAvatarText: {
+    color: '#ffffff',
+    fontSize: 28,
+    fontWeight: '700',
+  },
+  profileName: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#0f172a',
+    marginBottom: 4,
+  },
+  profileEmail: {
+    fontSize: 14,
+    color: '#64748b',
+  },
+  logoutBtn: {
+    width: '100%',
+    backgroundColor: '#fee2de',
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  logoutBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#e44332',
   },
 });

@@ -1,6 +1,7 @@
 /** Single task row with checkbox, title, description, due time, and swipe actions. */
 
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Check, Clock, Pencil, Trash2 } from 'lucide-react-native';
 import { fmtTime } from '@/utils/date';
 import { COLORS } from '@/constants/theme';
 import type { Todo } from '@/types/todo';
@@ -32,7 +33,7 @@ export function TaskRow({ todo, onToggle, onEdit, onDelete }: Props) {
         style={[styles.checkbox, todo.done && styles.checkboxDone]}
         accessibilityLabel={todo.done ? 'Mark incomplete' : 'Mark complete'}
       >
-        {todo.done && <View style={styles.checkmark} />}
+        {todo.done && <Check size={12} color="#ffffff" strokeWidth={3} />}
       </TouchableOpacity>
 
       {/* Content */}
@@ -49,17 +50,20 @@ export function TaskRow({ todo, onToggle, onEdit, onDelete }: Props) {
           </Text>
         ) : null}
         {todo.dueDate ? (
-          <Text style={styles.dueTime}>⏰ {fmtTime(todo.dueDate)}</Text>
+          <View style={styles.dueContainer}>
+            <Clock size={12} color="#e44332" style={styles.dueIcon} />
+            <Text style={styles.dueTime}>{fmtTime(todo.dueDate)}</Text>
+          </View>
         ) : null}
       </View>
 
       {/* Actions */}
       <View style={styles.actions}>
         <TouchableOpacity onPress={onEdit} style={styles.actionBtn} accessibilityLabel="Edit">
-          <Text style={styles.actionIcon}>✏️</Text>
+          <Pencil size={16} color="#64748b" />
         </TouchableOpacity>
         <TouchableOpacity onPress={confirmDelete} style={styles.actionBtn} accessibilityLabel="Delete">
-          <Text style={styles.actionIcon}>🗑️</Text>
+          <Trash2 size={16} color="#ef4444" />
         </TouchableOpacity>
       </View>
     </View>
@@ -120,7 +124,14 @@ const styles = StyleSheet.create({
   dueTime: {
     fontSize: 11,
     color: '#e44332',
-    marginTop: 3,
+  },
+  dueContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  dueIcon: {
+    marginRight: 4,
   },
   actions: {
     flexDirection: 'row',

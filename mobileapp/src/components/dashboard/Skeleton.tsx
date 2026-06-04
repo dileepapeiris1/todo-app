@@ -1,8 +1,8 @@
 /** Loading skeleton — animated placeholder rows. */
 
-import { StyleSheet, View } from 'react-native';
+import { DimensionValue, StyleSheet, View } from 'react-native';
 
-function SkeletonRow({ width }: { width: string }) {
+function SkeletonRow({ width }: { width: DimensionValue }) {
   return (
     <View style={styles.row}>
       <View style={styles.circle} />

@@ -1,5 +1,3 @@
-/** Logger context provider — exposes debug/info/warn/error, silenced in production. */
-
 import { createContext, useContext, type ReactNode } from 'react';
 
 interface Logger {

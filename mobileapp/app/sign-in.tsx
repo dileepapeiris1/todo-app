@@ -1,10 +1,10 @@
-/** Google sign-in screen. */
-
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import * as AuthSession from 'expo-auth-session';
 import { useAuth } from '@/contexts/AuthContext';
 import { API_URL, APP_NAME } from '@/constants/config';
 
@@ -18,12 +18,23 @@ export default function SignIn() {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+    redirectUri: 'https://auth.expo.io/@dileepapeiris/tracklog',
+    responseType: 'id_token',
+    shouldAutoExchangeCode: false,
   });
 
   useEffect(() => {
-    if (response?.type !== 'success') return;
+    if (!response) return;
+    if (response.type !== 'success') {
+      if (response.type === 'error') {
+        console.error('Google Auth Error response:', response.error);
+        setError('Authentication error: ' + (response.error?.message ?? 'Unknown error'));
+      }
+      return;
+    }
 
-    const idToken = response.authentication?.idToken;
+    const idToken = response.params.id_token;
+    console.log('Google Auth ID Token retrieved directly:', !!idToken);
     if (!idToken) {
       setError('Could not get ID token from Google.');
       return;
@@ -33,25 +44,30 @@ export default function SignIn() {
       setLoading(true);
       setError('');
       try {
+        console.log('Exchanging ID token with backend API...');
         const res = await fetch(`${API_URL}/api/v1/auth/google`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ credential: idToken }),
         });
+        console.log('Backend response status:', res.status);
         const data = await res.json() as {
           token?: string;
           user?: { id: string; email: string; name: string };
           message?: string;
         };
+        console.log('Backend response data:', data);
         if (!res.ok) {
           setError(data.message ?? 'Sign in failed. Please try again.');
           return;
         }
         if (data.token && data.user) {
+          console.log('Sign in successful, navigating to /todo');
           await signIn(data.token, data.user);
           router.replace('/todo');
         }
-      } catch {
+      } catch (err) {
+        console.error('Backend exchange error:', err);
         setError('Network error. Is the server running?');
       } finally {
         setLoading(false);
@@ -62,7 +78,7 @@ export default function SignIn() {
   }, [response]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.brand}>{APP_NAME}</Text>
         <Text style={styles.tagline}>Track your tasks. Log your progress.</Text>
@@ -74,14 +90,47 @@ export default function SignIn() {
         ) : (
           <TouchableOpacity
             style={[styles.googleBtn, !request && styles.googleBtnDisabled]}
-            onPress={() => void promptAsync()}
+            onPress={() => {
+              if (request?.url) {
+                const nativeRedirectUri = AuthSession.makeRedirectUri({
+                  path: 'expo-auth-session',
+                });
+                
+                // Store the original redirectUri (the proxy URL)
+                const originalRedirectUri = request.redirectUri;
+                // Mutate the request redirectUri to nativeRedirectUri so promptAsync uses it as the returnUrl
+                // @ts-ignore
+                request.redirectUri = nativeRedirectUri;
+
+                const proxyStartUrl = `https://auth.expo.io/@dileepapeiris/tracklog/start?${new URLSearchParams({
+                  authUrl: request.url,
+                  returnUrl: nativeRedirectUri,
+                }).toString()}`;
+                
+                promptAsync({ url: proxyStartUrl })
+                  .then(res => {
+                    console.log('promptAsync completed with result:', res);
+                    // Restore original redirectUri so token exchange uses the proxy URL
+                    // @ts-ignore
+                    request.redirectUri = originalRedirectUri;
+                  })
+                  .catch(err => {
+                    console.error('promptAsync failed with error:', err);
+                    // Restore on error as well
+                    // @ts-ignore
+                    request.redirectUri = originalRedirectUri;
+                  });
+              } else {
+                console.warn('Google Auth Request is not ready yet.');
+              }
+            }}
             disabled={!request}
           >
             <Text style={styles.googleText}>Sign in with Google</Text>
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

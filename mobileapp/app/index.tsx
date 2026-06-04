@@ -1,5 +1,3 @@
-/** Entry point — redirects to sign-in or todo based on auth state. */
-
 import { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
