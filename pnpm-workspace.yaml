@@ -2,4 +2,3 @@ packages:
   - 'backend'
   - 'webapp'
   - 'mobileapp'
-  - 'packages/*'
