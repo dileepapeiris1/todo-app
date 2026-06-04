@@ -313,7 +313,7 @@ const TodoPage = () => {
               />
             )}
             {todayTodos.length === 0 && !adding
-              ? <EmptyTodos label="No tasks due today" />
+              ? <EmptyTodos label="No tasks due today" onAddTask={() => setAdding(true)} />
               : todayTodos.map(renderRow)}
             {hasNextPage && <div ref={todosSentinel} className="h-1" />}
             {isFetchingNextPage && <Skeleton />}
@@ -326,7 +326,7 @@ const TodoPage = () => {
         isLoading ? <Skeleton /> : todoError ? (
           <ErrorState status={todoError.status} message={todoError.message} />
         ) : allGroups.length === 0 ? (
-          <EmptyTodos label="No tasks yet" />
+          <EmptyTodos label="No tasks yet" onAddTask={() => { handleViewChange(View.Today); setAdding(true); }} />
         ) : (
           <>
             {allGroups.map(({ label, items }) => (
@@ -353,7 +353,7 @@ const TodoPage = () => {
         isLoading ? <Skeleton /> : todoError ? (
           <ErrorState status={todoError.status} message={todoError.message} />
         ) : completedGroups.length === 0 ? (
-          <EmptyTodos label="No completed tasks yet" />
+          <EmptyTodos label="No completed tasks yet" onAddTask={() => { handleViewChange(View.Today); setAdding(true); }} />
         ) : (
           <>
             {completedGroups.map(({ label, items }) => (

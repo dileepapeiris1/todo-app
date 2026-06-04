@@ -91,7 +91,7 @@ const AppLayout = ({
       <nav className="relative z-30 flex h-11 shrink-0 items-center justify-between border-b border-quaternary-200 bg-white px-3 dark:border-gray-700 dark:bg-gray-900 sm:px-4">
         <div className="flex items-center gap-1.5 sm:gap-2">
           <button onClick={handleMenuToggle} title="Toggle sidebar"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-quaternary-500 transition-colors hover:bg-quaternary-100 hover:text-quaternary-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200">
+            className="hidden lg:flex h-8 w-8 items-center justify-center rounded-lg text-quaternary-500 transition-colors hover:bg-quaternary-100 hover:text-quaternary-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200">
             <Menu className="h-4 w-4" />
           </button>
           <button onClick={() => navigate(ROUTES.HOME)}
@@ -166,12 +166,7 @@ const AppLayout = ({
           <div className="flex items-center justify-between px-4 pb-2 pt-3">
             <div className="mx-auto h-1 w-10 rounded-full bg-quaternary-200 dark:bg-gray-600" />
           </div>
-          <div className="flex justify-end px-3 pb-1">
-            <button onClick={() => setMobileOpen(false)} aria-label="Close menu"
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-quaternary-100 text-quaternary-500 transition-colors hover:bg-quaternary-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600">
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </div>
+
           <AppSidebar collapsed={false} isMobileSheet={true} view={view} searchInput={searchInput}
             todayCount={todayCount} completedCount={completedCount} isSearchActive={isSearchActive}
             onAddTask={handleMobileAddTask} onViewChange={handleMobileViewChange}
@@ -211,6 +206,15 @@ const AppLayout = ({
           </footer>
         </main>
       </div>
+
+      {/* Mobile view bottom-right floating menu trigger button */}
+      <button
+        onClick={handleMenuToggle}
+        title="Toggle menu"
+        className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary-500/30 transition-all duration-200 active:scale-95 hover:bg-primary-hover lg:hidden"
+      >
+        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </button>
     </div>
   );
 };
