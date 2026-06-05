@@ -16,7 +16,7 @@ A full stack todo app. Sign in with Google, add todos with due dates, search acr
 
 | Service         | URL                                                                                                     |
 | --------------- | ------------------------------------------------------------------------------------------------------- |
-| **Backend API** | https://06b04fe1-8a50-4b28-944e-536d82ab1f01-prod.e1-us-east-azure.choreoapis.dev/todo-app/backend/v1.0 |
+| **Backend API** | https://backend-production-3eb38.up.railway.app/ |
 | **Web App**     | https://dileepapeiris1.github.io/todo-app/                                                              |
 | **Mobile App**  | -                                                                  |
 
@@ -28,10 +28,10 @@ This is a pnpm monorepo with three packages:
 
 ```
 todo-app/
-├── backend/      Express + TypeScript REST API
-├── webapp/       React + Vite web app
-├── mobileapp/    Expo + React Native mobile app
-├── package.json  workspace root (dev scripts)
+├── backend/     
+├── webapp/       
+├── mobileapp/   
+├── package.json  
 └── pnpm-workspace.yaml
 ```
 
@@ -79,13 +79,13 @@ The backend runs on `http://localhost:5000` and the webapp on `http://localhost:
 ┌───────────────────▼──────────────────┐
 │             Express API              │
 │   Node.js · TypeScript · Mongoose    │
-│   JWT auth · express-validator       │
+│              JWT auth                │
 └───────────────────┬──────────────────┘
                     │ Mongoose
                     │
 ┌───────────────────▼──────────────────┐
 │              MongoDB                 │
-│   Atlas or local mongod              │
+│       Atlas or local mongod          │
 └──────────────────────────────────────┘
 ```
 
