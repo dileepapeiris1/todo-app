@@ -1,6 +1,24 @@
 # TrackLog
 
-A full-stack todo app. Sign in with Google, add todos with due dates, search across your list, and track what is done.
+A full stack todo app. Sign in with Google, add todos with due dates, search across your list, and track what is done.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b927bb2f-dc13-4e1f-ac89-a635d728ead8" width="45%" />
+  <img src="https://github.com/user-attachments/assets/d938a542-1dcd-4f8a-b6cc-4a2468ad02c3" width="45%" />
+</p>
+
+<img width="1901" height="907" alt="image" src="https://github.com/user-attachments/assets/d1098f26-37ae-400a-bb43-66cd6d1e454d" />
+<img width="1917" height="911" alt="image" src="https://github.com/user-attachments/assets/0f194aa0-944f-45a6-920d-92df106abc99" />
+<img width="1917" height="906" alt="image" src="https://github.com/user-attachments/assets/dc62b0f2-527a-4c5f-8acd-654e5665fe83" />
+
+---
+
+## Live URLs
+
+| Service         | URL                                                                                                     |
+| --------------- | ------------------------------------------------------------------------------------------------------- |
+| **Backend API** | https://06b04fe1-8a50-4b28-944e-536d82ab1f01-prod.e1-us-east-azure.choreoapis.dev/todo-app/backend/v1.0 |
+| **Web App**     | https://dileepapeiris1.github.io/todo-app/                                                              |
+| **Mobile App**  | -                                                                  |
 
 ---
 
